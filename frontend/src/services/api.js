@@ -9,7 +9,7 @@ const api = axios.create({
 // API functions
 export const getCarByNumber = async (carNumber) => {
   try {
-    const response = await api.get(`/cars/${carNumber}`);
+    const response = await api.get(`/customer/cars/${carNumber}/status`);
     return response.data;
   } catch (error) {
     throw error;
@@ -34,18 +34,9 @@ export const createCar = async (carData) => {
   }
 };
 
-export const addServicesToCar = async (carId, services) => {
+export const updateCarStatus = async (carNumber, status) => {
   try {
-    const response = await api.post(`/admin/cars/${carId}/services`, { services });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const updateCarStatus = async (carId, status) => {
-  try {
-    const response = await api.put(`/admin/cars/${carId}/status`, { status });
+    const response = await api.put(`/admin/cars/number/${carNumber}/status`, { status });
     return response.data;
   } catch (error) {
     throw error;

@@ -1,6 +1,5 @@
 package com.kcarcare.controller;
 
-import com.kcarcare.dto.AddServiceRequest;
 import com.kcarcare.dto.CreateCarRequest;
 import com.kcarcare.dto.UpdateStatusRequest;
 import com.kcarcare.entity.Car;
@@ -24,16 +23,10 @@ public class CarAdminController {
         return ResponseEntity.ok(car);
     }
 
-    @PostMapping("/{carId}/services")
-    public ResponseEntity<Void> addServices(@PathVariable Long carId, @RequestBody AddServiceRequest request) {
-        carAdminService.addServicesToCar(carId, request);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{carId}/status")
-    public ResponseEntity<Void> updateStatus(@PathVariable Long carId, @RequestBody UpdateStatusRequest request) {
-        carAdminService.updateCarStatus(carId, request);
-        return ResponseEntity.ok().build();
+    @PutMapping("/number/{carNumber}/status")
+    public ResponseEntity<Car> updateStatus(@PathVariable String carNumber, @RequestBody UpdateStatusRequest request) {
+        Car car = carAdminService.updateCarStatus(carNumber, request);
+        return ResponseEntity.ok(car);
     }
 
     @GetMapping

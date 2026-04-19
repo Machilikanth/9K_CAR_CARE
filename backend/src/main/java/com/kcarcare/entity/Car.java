@@ -15,14 +15,18 @@ public class Car {
 
     private String carNumber;
 
+    private String customerName;
+
+    private String customerMobile;
+
+    private String workerName;
+
+    private String workerMobile;
+
     @Enumerated(EnumType.STRING)
     private CarStatus status;
 
     private LocalDateTime expectedDeliveryTime;
-
-    @ManyToOne
-    @JoinColumn(name = "branch_id")
-    private Branch branch;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 }

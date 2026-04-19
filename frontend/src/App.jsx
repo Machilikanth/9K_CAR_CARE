@@ -12,7 +12,7 @@ function App() {
           <Route path="/" element={<CarSearchPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/add-car" element={<AddCarPage />} />
-          <Route path="/admin/car/:id" element={<CarDetailsPage />} />
+          <Route path="/admin/car/:carNumber" element={<CarDetailsPage />} />
         </Routes>
       </div>
     </Router>

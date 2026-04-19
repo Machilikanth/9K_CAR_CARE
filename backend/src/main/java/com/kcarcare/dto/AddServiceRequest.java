@@ -8,4 +8,5 @@ import java.util.List;
 public class AddServiceRequest {
 
     private List<Long> serviceIds;
+    private List<String> serviceNames;
 }

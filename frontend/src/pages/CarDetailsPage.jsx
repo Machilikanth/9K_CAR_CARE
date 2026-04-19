@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCarByNumber, addServicesToCar, updateCarStatus } from '../services/api';
+import { getCarByNumber, updateCarStatus } from '../services/api';
 
 const CarDetailsPage = () => {
-  const { id } = useParams();
+  const { carNumber } = useParams();
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [selectedServices, setSelectedServices] = useState([]);
-  const [newStatus, setNewStatus] = useState('');
+  const [newStatus, setNewStatus] = useState('RECEIVED');
 
   // Mock services list - in real app, fetch from API
   const availableServices = [
@@ -23,26 +22,15 @@ const CarDetailsPage = () => {
   }, [id]);
 
   const fetchCar = async () => {
+    setLoading(true);
     try {
-      // Assuming id is carNumber for simplicity
-      const data = await getCarByNumber(id);
+      const data = await getCarByNumber(carNumber);
       setCar(data);
       setNewStatus(data.status);
     } catch (err) {
       setError('Failed to load car details');
     }
     setLoading(false);
-  };
-
-  const handleAddServices = async () => {
-    if (selectedServices.length === 0) return;
-    try {
-      await addServicesToCar(id, selectedServices);
-      fetchCar(); // Refresh data
-      setSelectedServices([]);
-    } catch (err) {
-      setError('Failed to add services');
-    }
   };
 
   const handleUpdateStatus = async () => {
@@ -82,13 +70,16 @@ const CarDetailsPage = () => {
             </span>
           </p>
           <p><strong>Delivery Time:</strong> {car.expectedDeliveryTime}</p>
-          <h3 className="text-lg font-semibold mt-4 mb-2">Services</h3>
-          <ul className="list-disc list-inside">
-            {car.services.map((service, index) => (
-              <li key={index}>{service.name} - ${service.price}</li>
-            ))}
+          <h3 className="text-lg font-semibold mt-4 mb-2">Service Types</h3>
+          <ul className="list-disc list-inside ml-4">
+            {car.serviceTypes && car.serviceTypes.length > 0 ? (
+              car.serviceTypes.map((service, index) => (
+                <li key={index}>{service}</li>
+              ))
+            ) : (
+              <li>No service types assigned</li>
+            )}
           </ul>
-          <p className="mt-2"><strong>Total Price:</strong> ${car.totalPrice}</p>
         </div>
 
         {/* Update Status */}
@@ -102,44 +93,12 @@ const CarDetailsPage = () => {
             <option value="RECEIVED">RECEIVED</option>
             <option value="IN_PROGRESS">IN_PROGRESS</option>
             <option value="COMPLETED">COMPLETED</option>
-            <option value="DELIVERED">DELIVERED</option>
           </select>
           <button
             onClick={handleUpdateStatus}
             className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
           >
             Update Status
-          </button>
-        </div>
-
-        {/* Add Services */}
-        <div className="bg-white p-6 rounded-lg shadow-md md:col-span-2">
-          <h2 className="text-xl font-bold mb-4">Add Services</h2>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            {availableServices.map((service) => (
-              <label key={service.id} className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={selectedServices.includes(service.id)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedServices([...selectedServices, service.id]);
-                    } else {
-                      setSelectedServices(selectedServices.filter(id => id !== service.id));
-                    }
-                  }}
-                  className="mr-2"
-                />
-                {service.name} - ${service.price}
-              </label>
-            ))}
-          </div>
-          <button
-            onClick={handleAddServices}
-            disabled={selectedServices.length === 0}
-            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:bg-gray-400"
-          >
-            Add Selected Services
           </button>
         </div>
       </div>

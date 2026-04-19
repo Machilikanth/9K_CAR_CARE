@@ -65,7 +65,7 @@ const AdminDashboard = () => {
                 </td>
                 <td className="px-4 py-2">{car.expectedDeliveryTime}</td>
                 <td className="px-4 py-2">
-                  <Link to={`/admin/car/${car.id}`} className="text-blue-500 hover:underline">
+                  <Link to={`/admin/car/${car.carNumber}`} className="text-blue-500 hover:underline">
                     Manage
                   </Link>
                 </td>

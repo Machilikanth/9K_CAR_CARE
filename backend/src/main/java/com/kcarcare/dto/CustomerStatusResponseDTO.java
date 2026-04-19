@@ -6,13 +6,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class CreateCarRequest {
+public class CustomerStatusResponseDTO {
 
     private String carNumber;
     private String customerName;
-    private String customerMobile;
+    private List<String> serviceTypes;
+    private String status;
     private String workerName;
-    private String workerMobile;
-    private LocalDateTime expectedDeliveryTime;
-    private List<String> serviceNames;
+    private LocalDateTime estimatedDeliveryTime;
+    private String message;
 }

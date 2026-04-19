@@ -32,12 +32,22 @@ const CarDetailsCard = ({ car }) => {
       <div className="mb-4">
         <strong className="flex items-center"><Wrench className="mr-1" size={16} /> Services:</strong>
         <ul className="list-disc list-inside ml-4">
-          {car.services.map((service, index) => (
-            <li key={index}>{service.name} - ${service.price}</li>
-          ))}
+          {car.serviceTypes && car.serviceTypes.length > 0 ? (
+            car.serviceTypes.map((service, index) => (
+              <li key={index}>{service}</li>
+            ))
+          ) : car.services && car.services.length > 0 ? (
+            car.services.map((service, index) => (
+              <li key={index}>{service.name} - ${service.price}</li>
+            ))
+          ) : (
+            <li>No service types available</li>
+          )}
         </ul>
       </div>
-      <p className="text-2xl font-bold text-green-600 text-center bg-green-50 py-2 rounded-lg">Total: ${car.totalPrice}</p>
+      {car.totalPrice !== undefined && (
+        <p className="text-2xl font-bold text-green-600 text-center bg-green-50 py-2 rounded-lg">Total: ${car.totalPrice}</p>
+      )}
     </div>
   );
 };
