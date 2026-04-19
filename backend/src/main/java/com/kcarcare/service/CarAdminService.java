@@ -35,6 +35,10 @@ public class CarAdminService {
         // Convert carNumber to uppercase
         String carNumber = request.getCarNumber().toUpperCase();
 
+        if (request.getBranchId() == null) {
+            throw new IllegalArgumentException("branchId is required for creating a car");
+        }
+
         // Find branch
         Optional<Branch> branchOpt = branchRepository.findById(request.getBranchId());
         if (branchOpt.isEmpty()) {
