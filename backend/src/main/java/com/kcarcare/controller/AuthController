@@ -1,0 +1,39 @@
+package com.carcare.controller;
+
+import com.carcare.dto.*;
+import com.carcare.service.AuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+public class AuthController {
+    private final AuthService authService;
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.register(request.getUsername(), request.getPassword(), request.getEmail()));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+        boolean success = authService.login(request.getUsername(), request.getPassword());
+        return success ? ResponseEntity.ok("Login Successful") : ResponseEntity.status(401).body("Invalid credentials");
+    }
+
+    @PutMapping("/password/update")
+    public ResponseEntity<String> updatePassword(@RequestBody PasswordUpdateRequest request) {
+        try {
+            return ResponseEntity.ok(authService.updatePassword(request.getUsername(), request.getOldPassword(), request.getNewPassword()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/password/forgot")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        return ResponseEntity.ok(authService.generateResetToken(email));
+    }
+}
